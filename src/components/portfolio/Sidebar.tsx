@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Github, Linkedin, Twitter, Hashnode } from "./icons";
+import { onSectionNavClick, scrollToTop } from "@/lib/scroll";
 
 const NAV = [
   { num: "01", label: "Shipped", href: "#projects", id: "projects" },
@@ -51,7 +52,14 @@ export function Sidebar() {
   return (
     <aside className="hidden w-[300px] shrink-0 flex-col justify-between py-24 lg:sticky lg:top-0 lg:flex lg:h-screen lg:max-h-screen">
       <div>
-        <a href="#" className="group flex items-start gap-4">
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            scrollToTop();
+          }}
+          className="group flex items-start gap-4"
+        >
           <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-accent/40 shadow-[0_0_24px_-6px_var(--color-accent)]">
             <img src={AVATAR} alt="Ayush Panda" className="h-full w-full object-cover object-top" />
           </div>
@@ -75,6 +83,7 @@ export function Sidebar() {
                 <li key={n.id}>
                   <a
                     href={n.href}
+                    onClick={(e) => onSectionNavClick(e, n.id)}
                     className={`group flex items-center gap-3 py-2 text-[13px] font-medium transition-colors ${
                       isActive ? "text-ink" : "text-ink-faint hover:text-ink"
                     }`}
@@ -87,7 +96,7 @@ export function Sidebar() {
                       {n.num}
                     </span>
                     <span
-                      className={`h-px transition-all duration-300 ${
+                      className={`h-px transition-all duration-200 ${
                         isActive
                           ? "w-10 bg-accent"
                           : "w-5 bg-border-line group-hover:w-8 group-hover:bg-ink-soft"
@@ -137,7 +146,15 @@ export function MobileNav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border-line/60 bg-bg/90 backdrop-blur-md lg:hidden">
       <div className="flex items-center justify-between px-5 py-3">
-        <a href="#" className="flex items-center gap-3">
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            setOpen(false);
+            scrollToTop();
+          }}
+          className="flex items-center gap-3"
+        >
           <div className="h-9 w-9 overflow-hidden rounded-full border border-accent/40">
             <img src={AVATAR} alt="" className="h-full w-full object-cover object-top" />
           </div>
@@ -157,6 +174,7 @@ export function MobileNav() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.18 }}
             className="overflow-hidden border-t border-border-line"
           >
             <div className="px-5 py-3">
@@ -164,7 +182,10 @@ export function MobileNav() {
                 <a
                   key={n.id}
                   href={n.href}
-                  onClick={() => setOpen(false)}
+                  onClick={(e) => {
+                    onSectionNavClick(e, n.id);
+                    setOpen(false);
+                  }}
                   className={`flex items-center gap-3 border-b border-border-soft py-3 text-[14px] ${
                     active === n.id ? "text-accent" : "text-ink"
                   }`}
@@ -180,4 +201,3 @@ export function MobileNav() {
     </header>
   );
 }
-

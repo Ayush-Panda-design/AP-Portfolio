@@ -10,7 +10,7 @@ function Counter({ value, decimals = 0, suffix = "" }: { value: number; decimals
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const mv = useMotionValue(0);
-  const sv = useSpring(mv, { duration: 1.2 });
+  const sv = useSpring(mv, { duration: 0.6 });
 
   useEffect(() => {
     if (inView) mv.set(value);
@@ -85,9 +85,10 @@ export function About() {
       <div className="mt-8 space-y-8">
           <div>
             <motion.div
-              initial={{ y: 18, opacity: 0 }}
+              initial={{ y: 10, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.22 }}
               className="space-y-5 text-[15px] leading-[1.85] text-ink-soft"
             >
               <p>
@@ -116,14 +117,13 @@ export function About() {
               const isOpen = open === i;
               return (
                 <motion.button
-                  layout
                   key={c.title}
                   onClick={() => setOpen(isOpen ? null : i)}
-                  initial={{ y: 24, opacity: 0 }}
+                  initial={{ y: 12, opacity: 0 }}
                   whileInView={{ y: 0, opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  whileHover={{ y: -4 }}
+                  transition={{ delay: i * 0.03, duration: 0.2 }}
+                  whileHover={{ y: -3 }}
                   className="text-left"
                 >
                   <SpotlightCard
@@ -131,7 +131,7 @@ export function About() {
                       isOpen ? "border-accent/50" : ""
                     }`}
                   >
-                    <motion.div layout="position" className="flex items-start justify-between gap-3">
+                    <div className="flex items-start justify-between gap-3">
                       <div className="font-display text-3xl font-bold text-ink">
                         {c.kind === "num" ? (
                           <Counter value={c.value} decimals={c.decimals} suffix={c.suffix ?? ""} />
@@ -143,25 +143,24 @@ export function About() {
                       </div>
                       <motion.span
                         animate={{ rotate: isOpen ? 45 : 0 }}
+                        transition={{ duration: 0.15 }}
                         className="rounded-full bg-accent/10 p-1.5 text-accent"
                       >
                         {isOpen ? <X size={14} /> : <Plus size={14} />}
                       </motion.span>
-                    </motion.div>
+                    </div>
                     {c.kind === "num" && (
-                      <motion.div
-                        layout="position"
-                        className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-faint"
-                      >
+                      <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-faint">
                         {c.title}
-                      </motion.div>
+                      </div>
                     )}
-                    <AnimatePresence>
+                    <AnimatePresence initial={false}>
                       {isOpen && (
                         <motion.p
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.18 }}
                           className="mt-4 text-[13px] leading-[1.7] text-ink-soft"
                         >
                           {c.body}

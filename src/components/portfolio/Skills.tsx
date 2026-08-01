@@ -29,7 +29,7 @@ export function Skills() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: gi * 0.04 }}
+            transition={{ delay: gi * 0.02, duration: 0.2 }}
             className="rounded-xl border border-border-line bg-surface/40 p-4"
           >
             <div className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-accent">

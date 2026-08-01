@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { MovingBorder } from "./effects/MovingBorder";
 import { TextGenerate } from "./effects/TextGenerate";
+import { onSectionNavClick } from "@/lib/scroll";
 
 const TYPE_PHRASES = [
   "for startups.",
@@ -19,12 +20,12 @@ function Typewriter() {
 
   useEffect(() => {
     const full = TYPE_PHRASES[i];
-    const speed = deleting ? 40 : 80;
+    const speed = deleting ? 32 : 55;
     const t = setTimeout(() => {
       if (!deleting) {
         const next = full.slice(0, text.length + 1);
         setText(next);
-        if (next === full) setTimeout(() => setDeleting(true), 1600);
+        if (next === full) setTimeout(() => setDeleting(true), 1200);
       } else {
         const next = full.slice(0, text.length - 1);
         setText(next);
@@ -48,7 +49,6 @@ function Typewriter() {
 export function Hero() {
   return (
     <section id="intro" className="pb-10">
-      {/* Mobile-only identity + avatar */}
       <div className="mb-8 lg:hidden">
         <MovingBorder containerClassName="mb-4 inline-flex" className="px-3 py-1">
           <span className="font-mono text-[10px] tracking-[0.16em] text-accent">Open to work</span>
@@ -64,11 +64,10 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Desktop avatar — sits above intro in the content column */}
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         className="mb-8 hidden lg:block"
       >
         <div className="relative inline-block">
@@ -95,8 +94,9 @@ export function Hero() {
       </motion.div>
 
       <motion.p
-        initial={{ opacity: 0, y: 8 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22 }}
         className="font-mono text-[12px] tracking-[0.2em] text-accent"
       >
         Hi, I&apos;m Ayush —
@@ -106,14 +106,19 @@ export function Hero() {
         <TextGenerate words="I build production-grade full-stack web apps." />
       </h2>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="mt-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.08, duration: 0.2 }}
+        className="mt-4"
+      >
         <Typewriter />
       </motion.div>
 
       <motion.p
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.55 }}
+        transition={{ delay: 0.12, duration: 0.22 }}
         className="mt-5 text-[15px] leading-[1.8] text-ink-soft"
       >
         CS undergrad at VSSUT (5th semester, CGPA 8.27). Focused on type-safe APIs, careful UI, and shipping
@@ -121,25 +126,28 @@ export function Hero() {
       </motion.p>
 
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
+        transition={{ delay: 0.16, duration: 0.22 }}
         className="mt-7 flex flex-wrap items-center gap-3"
       >
         <a
           href="#projects"
+          onClick={(e) => onSectionNavClick(e, "projects")}
           className="inline-flex items-center rounded-full bg-accent px-5 py-2.5 text-[13px] font-semibold text-primary-foreground transition-all hover:bg-accent-hover hover:shadow-[0_0_32px_-8px_var(--color-accent)]"
         >
           View projects
         </a>
         <a
           href="#learning"
+          onClick={(e) => onSectionNavClick(e, "learning")}
           className="inline-flex items-center rounded-full border border-border-line px-5 py-2.5 text-[13px] font-semibold text-ink transition-colors hover:border-accent/40 hover:text-accent"
         >
           Practice trail
         </a>
         <a
           href="#resume"
+          onClick={(e) => onSectionNavClick(e, "resume")}
           className="inline-flex items-center rounded-full border border-border-line px-5 py-2.5 text-[13px] font-semibold text-ink transition-colors hover:border-accent/40 hover:text-accent"
         >
           Download resume
@@ -149,7 +157,7 @@ export function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.85 }}
+        transition={{ delay: 0.2, duration: 0.22 }}
         className="mt-8 flex items-center gap-8"
       >
         {[

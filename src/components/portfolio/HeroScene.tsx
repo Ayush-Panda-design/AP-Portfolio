@@ -42,20 +42,20 @@ function FloatingShapes() {
 
       <Float speed={1.8} rotationIntensity={1} floatIntensity={1.5}>
         <Torus ref={torus} args={[0.55, 0.18, 32, 64]} position={[1.6, 0.9, -0.4]}>
-          <meshStandardMaterial color="#38bdf8" metalness={0.8} roughness={0.2} emissive="#0ea5e9" emissiveIntensity={0.3} />
+          <meshStandardMaterial color="#99f6e4" metalness={0.8} roughness={0.2} emissive="#2dd4bf" emissiveIntensity={0.3} />
         </Torus>
       </Float>
 
       <Float speed={2} rotationIntensity={1.2} floatIntensity={1}>
         <Octahedron ref={octa} args={[0.45, 0]} position={[-1.5, -0.8, 0.5]}>
-          <meshStandardMaterial color="#a78bfa" metalness={0.7} roughness={0.15} emissive="#7c3aed" emissiveIntensity={0.25} />
+          <meshStandardMaterial color="#2dd4bf" metalness={0.7} roughness={0.15} emissive="#14b8a6" emissiveIntensity={0.25} />
         </Octahedron>
       </Float>
 
       <Float speed={1.2} rotationIntensity={0.4} floatIntensity={0.8}>
         <mesh position={[1.2, -1.1, 0.3]}>
           <icosahedronGeometry args={[0.35, 0]} />
-          <meshStandardMaterial color="#f472b6" metalness={0.6} roughness={0.25} emissive="#db2777" emissiveIntensity={0.2} wireframe />
+          <meshStandardMaterial color="#a39e98" metalness={0.6} roughness={0.25} emissive="#6f6a64" emissiveIntensity={0.2} wireframe />
         </mesh>
       </Float>
 
@@ -73,9 +73,9 @@ function Scene() {
   return (
     <>
       <ambientLight intensity={0.35} />
-      <directionalLight position={[4, 4, 2]} intensity={1.2} color="#e0f2fe" />
+      <directionalLight position={[4, 4, 2]} intensity={1.2} color="#f2f0ed" />
       <pointLight position={[-3, 2, 2]} intensity={1.5} color="#5eead4" />
-      <pointLight position={[3, -2, -1]} intensity={1} color="#818cf8" />
+      <pointLight position={[3, -2, -1]} intensity={1} color="#99f6e4" />
       <Stars radius={40} depth={30} count={800} factor={2.5} saturation={0} fade speed={0.6} />
       <FloatingShapes />
     </>
@@ -90,7 +90,7 @@ export function HeroScene() {
   }, []);
 
   if (!ready) {
-    return <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-sky-500/5" />;
+    return <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-accent/5" />;
   }
 
   return (

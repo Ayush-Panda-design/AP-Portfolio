@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Sidebar, MobileNav } from "@/components/portfolio/Sidebar";
 import { Hero } from "@/components/portfolio/Hero";
 import { TrustBar } from "@/components/portfolio/TrustBar";
@@ -11,6 +12,7 @@ import { Resume } from "@/components/portfolio/Resume";
 import { Contact } from "@/components/portfolio/Contact";
 import { Footer } from "@/components/portfolio/Footer";
 import { Cursor } from "@/components/portfolio/Cursor";
+import { scrollToSection } from "@/lib/scroll";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,6 +31,13 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  useEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (!hash) return;
+    // Land on the section instantly when returning from a project page
+    requestAnimationFrame(() => scrollToSection(hash, { instant: true, updateHash: false }));
+  }, []);
+
   return (
     <main className="min-h-screen bg-bg text-ink">
       <Cursor />

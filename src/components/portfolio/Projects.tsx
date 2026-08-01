@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 const ACCENT: Record<string, { bar: string; badge: string; glow: string }> = {
   teal: {
-    bar: "from-accent/40 via-sky-500/20 to-transparent",
+    bar: "from-accent/40 via-accent/20 to-transparent",
     badge: "border-accent/30 bg-accent/10 text-accent",
     glow: "hover:shadow-[0_24px_48px_-28px_rgba(94,234,212,0.5)]",
   },
@@ -67,10 +67,10 @@ export function Projects() {
           return (
             <motion.div
               key={p.id}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.06 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ delay: i * 0.03, duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               whileHover={{ y: -2 }}
             >
               <SpotlightCard className={cn("transition-shadow duration-500", a.glow)}>
@@ -122,7 +122,7 @@ export function Projects() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.32 }}
+                      transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
                       className="relative overflow-hidden"
                     >
                       <div className="border-t border-border-line/70 px-5 pb-5 pt-4 sm:px-6">
