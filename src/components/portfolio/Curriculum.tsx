@@ -84,7 +84,7 @@ const TRACKS: Track[] = [
     icon: Code2,
     title: "Building Blocks",
     subtitle: "HTML, CSS & responsive layouts",
-    color: "text-sky-300",
+    color: "text-accent",
     diagram: "client",
     topics: [
       {
@@ -131,7 +131,7 @@ const TRACKS: Track[] = [
     icon: Braces,
     title: "TypeScript Essentials",
     subtitle: "JavaScript with types",
-    color: "text-blue-300",
+    color: "text-accent-hover",
     topics: [
       {
         heading: "Type System",

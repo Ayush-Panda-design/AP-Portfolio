@@ -87,7 +87,7 @@ export function Contact() {
       {/* Heading */}
       <h2 className="font-display text-2xl font-bold leading-snug tracking-tight text-ink sm:text-3xl lg:text-4xl">
         Let&apos;s build something{" "}
-        <span className="bg-gradient-to-r from-accent to-sky-400 bg-clip-text text-transparent">
+        <span className="bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">
           together.
         </span>
       </h2>
@@ -101,10 +101,10 @@ export function Contact() {
 
         {/* ── LEFT: Form ── */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.22 }}
           className="relative overflow-hidden rounded-2xl border border-border-line bg-surface p-6"
         >
           <div aria-hidden className="pointer-events-none absolute -left-12 -top-12 h-48 w-48 rounded-full bg-accent/10 blur-3xl" />
@@ -183,15 +183,15 @@ export function Contact() {
 
         {/* ── RIGHT: Email + Socials ── */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.22, delay: 0.04 }}
           className="flex flex-col gap-4 lg:w-[220px]"
         >
           {/* Email card */}
           <div className="relative overflow-hidden rounded-2xl border border-border-line bg-surface p-5">
-            <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full bg-sky-500/10 blur-2xl" />
+            <div aria-hidden className="pointer-events-none absolute right-0 top-0 h-32 w-32 rounded-full bg-accent/10 blur-2xl" />
             <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-faint">Email directly</p>
             <p className="mb-3 break-all text-[13px] font-medium text-ink">{EMAIL}</p>
             <div className="flex gap-2">

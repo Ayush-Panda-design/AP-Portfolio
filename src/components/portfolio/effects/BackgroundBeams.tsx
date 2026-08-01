@@ -55,17 +55,17 @@ export function BackgroundBeams({ className }: { className?: string }) {
           <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop stopColor="#5eead4" stopOpacity="0" />
             <stop offset="0.5" stopColor="#5eead4" />
-            <stop offset="1" stopColor="#38bdf8" stopOpacity="0" />
+            <stop offset="1" stopColor="#99f6e4" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop stopColor="#38bdf8" stopOpacity="0" />
-            <stop offset="0.5" stopColor="#818cf8" />
-            <stop offset="1" stopColor="#5eead4" stopOpacity="0" />
+            <stop stopColor="#2dd4bf" stopOpacity="0" />
+            <stop offset="0.5" stopColor="#5eead4" />
+            <stop offset="1" stopColor="#99f6e4" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop stopColor="#a78bfa" stopOpacity="0" />
+            <stop stopColor="#99f6e4" stopOpacity="0" />
             <stop offset="0.5" stopColor="#5eead4" />
-            <stop offset="1" stopColor="#38bdf8" stopOpacity="0" />
+            <stop offset="1" stopColor="#2dd4bf" stopOpacity="0" />
           </linearGradient>
           <filter id="filter" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="1" />

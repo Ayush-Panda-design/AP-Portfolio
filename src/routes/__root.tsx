@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GoogleAnalytics } from "../components/portfolio/GoogleAnalytics";
+import { PageTransition } from "../components/portfolio/PageTransition";
 
 function NotFoundComponent() {
   return (
@@ -119,8 +120,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <GoogleAnalytics />
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <PageTransition>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+      </PageTransition>
     </QueryClientProvider>
   );
 }

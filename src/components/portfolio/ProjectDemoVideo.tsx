@@ -68,14 +68,14 @@ export function ProjectDemoVideo({ src, title, accent = "teal", active = true }:
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      whileHover={{ y: -4, scale: 1.012 }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+      whileHover={{ y: -2 }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       className={cn(
-        "group relative aspect-[944/451] w-full overflow-hidden rounded-xl bg-black ring-1 ring-border-line/60 transition-shadow duration-500",
+        "group relative aspect-[944/451] w-full overflow-hidden rounded-xl bg-black ring-1 ring-border-line/60 transition-shadow duration-300",
         a.ring,
         a.glow,
       )}
@@ -100,7 +100,7 @@ export function ProjectDemoVideo({ src, title, accent = "teal", active = true }:
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         aria-label={`${title} demo video`}
         className="absolute inset-0 h-full w-full object-contain"
         onPlay={() => setPlaying(true)}

@@ -16,7 +16,7 @@ export function DnsDiagram() {
         <defs>
           <linearGradient id="dnsLine" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#5eead4" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#99f6e4" stopOpacity="0.4" />
           </linearGradient>
         </defs>
         {[
@@ -48,7 +48,7 @@ export function DnsDiagram() {
               cx={n.x}
               cy={n.y}
               r="5"
-              fill="#0f1629"
+              fill="#1a1a1a"
               stroke="#5eead4"
               strokeWidth="0.5"
               initial={{ scale: 0 }}
@@ -60,7 +60,7 @@ export function DnsDiagram() {
               x={n.x}
               y={n.y + 0.8}
               textAnchor="middle"
-              fill="#94a3b8"
+              fill="#a39e98"
               fontSize="3.2"
               fontFamily="JetBrains Mono, monospace"
             >
@@ -87,7 +87,7 @@ export function TcpHandshakeDiagram() {
     <div className="rounded-xl border border-border-line bg-bg/60 p-4">
       <div className="mb-4 flex justify-between font-mono text-[11px] text-ink-soft">
         <span className="rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-accent">Client</span>
-        <span className="rounded-full border border-sky-400/30 bg-sky-400/10 px-3 py-1 text-sky-300">Server</span>
+        <span className="rounded-full border border-ink-faint/40 bg-surface px-3 py-1 text-ink-soft">Server</span>
       </div>
       <div className="space-y-3">
         {steps.map((s, i) => (
@@ -99,11 +99,11 @@ export function TcpHandshakeDiagram() {
             transition={{ delay: i * 0.15 }}
             className="flex items-center gap-3"
           >
-            <div className={`h-px flex-1 ${s.from === "Client" ? "bg-gradient-to-r from-accent to-sky-400" : "bg-gradient-to-l from-accent to-sky-400"}`} />
+            <div className={`h-px flex-1 ${s.from === "Client" ? "bg-gradient-to-r from-accent to-accent/40" : "bg-gradient-to-l from-accent to-accent/40"}`} />
             <span className="rounded-md border border-border-line bg-surface px-2 py-1 font-mono text-[10px] text-ink">
               {s.label}
             </span>
-            <div className={`h-px flex-1 ${s.from === "Client" ? "bg-gradient-to-r from-sky-400 to-transparent" : "bg-gradient-to-l from-sky-400 to-transparent"}`} />
+            <div className={`h-px flex-1 ${s.from === "Client" ? "bg-gradient-to-r from-accent/40 to-transparent" : "bg-gradient-to-l from-accent/40 to-transparent"}`} />
           </motion.div>
         ))}
       </div>
@@ -132,14 +132,14 @@ export function ClientServerDiagram() {
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            className="h-0.5 w-10 origin-left bg-gradient-to-r from-accent to-sky-400"
+            className="h-0.5 w-10 origin-left bg-gradient-to-r from-accent to-accent/50"
           />
           <span className="font-mono text-[9px] text-accent">HTTP</span>
           <motion.div
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
-            className="h-0.5 w-10 origin-right bg-gradient-to-l from-accent to-sky-400"
+            className="h-0.5 w-10 origin-right bg-gradient-to-l from-accent to-accent/50"
           />
         </div>
         <motion.div
@@ -147,7 +147,7 @@ export function ClientServerDiagram() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="rounded-xl border border-sky-400/30 bg-sky-400/5 p-4 text-center"
+          className="rounded-xl border border-border-line bg-surface/60 p-4 text-center"
         >
           <div className="font-display text-lg font-bold text-ink">Server</div>
           <div className="mt-1 font-mono text-[10px] text-ink-faint">API · Host</div>
@@ -163,9 +163,9 @@ export function ClientServerDiagram() {
 export function StackLayersDiagram() {
   const layers = [
     { label: "React / Next.js", color: "from-accent/30 to-accent/5" },
-    { label: "Node.js / Express / tRPC", color: "from-sky-400/30 to-sky-400/5" },
-    { label: "PostgreSQL · Redis · MongoDB", color: "from-violet-400/30 to-violet-400/5" },
-    { label: "Docker · CI/CD · Cloud", color: "from-pink-400/30 to-pink-400/5" },
+    { label: "Node.js / Express / tRPC", color: "from-accent/20 to-accent/5" },
+    { label: "PostgreSQL · Redis · MongoDB", color: "from-ink-faint/30 to-ink-faint/5" },
+    { label: "Docker · CI/CD · Cloud", color: "from-ink-soft/20 to-ink-soft/5" },
   ];
 
   return (
@@ -176,7 +176,7 @@ export function StackLayersDiagram() {
           initial={{ opacity: 0, x: -24 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: i * 0.1 }}
+          transition={{ delay: i * 0.04, duration: 0.2 }}
           className={`rounded-xl border border-border-line bg-gradient-to-r ${l.color} px-4 py-3 font-mono text-[12px] text-ink`}
         >
           {l.label}

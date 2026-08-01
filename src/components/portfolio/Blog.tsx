@@ -57,7 +57,7 @@ export function Blog() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: i * 0.05 }}
+            transition={{ delay: i * 0.02, duration: 0.2 }}
           >
             <a
               href={p.url}
