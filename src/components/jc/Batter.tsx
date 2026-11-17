@@ -124,7 +124,7 @@ export function Batter({ p, n, targets, kick }: { p: MotionValue<number>; n: num
       camera.position.set(0, g.cy, dist);
       camera.lookAt(0, g.cy, 0);
       camera.updateProjectionMatrix();
-      const bx = (Math.max(0.12, Math.min(0.2, 190 / w + 0.04)) - 0.5) * g.Wd;
+      const bx = ((w < 900 ? 0.17 : Math.max(0.12, Math.min(0.2, 190 / w + 0.04))) - 0.5) * g.Wd;
       root.position.x = bx;
       sh.position.x = bx;
       armL.rotation.x = -1.05;

@@ -27,8 +27,8 @@ export function Nav({ resumeHref }: { resumeHref: string }) {
   return (
     <motion.nav
       className="jc-nav jc-glass"
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ x: "-50%", y: 100, opacity: 0 }}
+      animate={{ x: "-50%", y: 0, opacity: 1 }}
       transition={{ type: "spring", stiffness: 170, damping: 18, delay: 2 }}
       aria-label="Primary"
     >
