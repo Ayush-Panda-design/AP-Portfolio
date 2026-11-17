@@ -43,7 +43,8 @@ export function Work() {
           label="Selected work"
           title="Things I shipped."
           hint="Keep scrolling · tap a card to open it"
-          vh={60}
+          vh={70}
+          throwImages={PRODUCTION.map((p) => p.screenshots[0]?.src)}
           items={PRODUCTION.map((p) => ({
             key: p.id,
             accent: ACCENT[p.accent] ?? "#ffb534",

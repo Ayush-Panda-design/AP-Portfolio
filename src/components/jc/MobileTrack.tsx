@@ -1,12 +1,12 @@
 import { motion, useMotionValue, useMotionValueEvent, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { Boy } from "./Boy";
+import { Boy, B_FLY0, B_START, B_W } from "./Boy";
 import { scrollToY } from "./lib";
 
 export type TrackItem = { key: string; accent: string; label: string; node: ReactNode };
 
 /** Phone version of the pinned tours: vertical scroll slides the cards sideways while the avatar walks. */
-export function MobileTrack({ label, title, items, vh = 55, hint }: { label: string; title: string; items: TrackItem[]; vh?: number; hint: string }) {
+export function MobileTrack({ label, title, items, vh = 55, hint, throwImages }: { label: string; title: string; items: TrackItem[]; vh?: number; hint: string; throwImages?: (string | undefined)[] }) {
   const n = items.length;
   const ref = useRef<HTMLDivElement>(null);
   const [vw, setVw] = useState(390);
@@ -34,11 +34,23 @@ export function MobileTrack({ label, title, items, vh = 55, hint }: { label: str
     };
   }, [raw]);
   const p = useSpring(raw, { stiffness: 120, damping: 30, mass: 0.35 });
-  useMotionValueEvent(p, "change", (v) => setI(Math.max(0, Math.min(n - 1, Math.round(v * (n - 1))))));
+  const thrown = !!throwImages;
+  // throw mode: card k appears when he lets go of it; the track then centres on it
+  const [rel, setRel] = useState(0);
+  useMotionValueEvent(p, "change", (v) => {
+    if (!thrown) return setI(Math.max(0, Math.min(n - 1, Math.round(v * (n - 1)))));
+    const k = (v - B_START) / B_W;
+    const r = k < 0 ? 0 : k >= n ? n : Math.floor(k) + (k - Math.floor(k) >= B_FLY0 ? 1 : 0);
+    setRel(r);
+    setI(Math.max(0, r - 1));
+  });
   const cardW = Math.round(vw * 0.8);
   const gap = 14;
   const stride = cardW + gap;
-  const x = useTransform(p, (v) => -v * (n - 1) * stride);
+  const walkX = useTransform(p, (v) => -v * (n - 1) * stride);
+  const throwX = useSpring(0, { stiffness: 170, damping: 22 });
+  useEffect(() => { if (thrown) throwX.set(-i * stride); }, [thrown, i, stride, throwX]);
+  const x = thrown ? throwX : walkX;
   const go = (k: number) => {
     const el = ref.current;
     if (!el) return;
@@ -53,14 +65,20 @@ export function MobileTrack({ label, title, items, vh = 55, hint }: { label: str
           <h2 className="jc-h2" style={{ fontSize: "clamp(28px,8.4vw,44px)" }}>{title}</h2>
         </div>
         <div className="mt-stage">
-          <Boy p={p} n={n} mode="walk" line={items[i].label} />
+          <Boy p={p} n={n} mode={thrown ? "throw" : "walk"} images={throwImages} line={items[i].label} />
           <div className="mt-floor" />
         </div>
         <motion.div className="mt-track" style={{ x, paddingLeft: (vw - cardW) / 2, gap }}>
           {items.map((it, k) => (
-            <div key={it.key} className={`mt-card ${k === i ? "on" : ""}`} style={{ width: cardW, ["--a" as string]: it.accent }}>
+            <motion.div
+              key={it.key}
+              className={`mt-card ${k === i && (!thrown || rel > 0) ? "on" : ""} ${thrown ? "hot" : ""}`}
+              style={{ width: cardW, ["--a" as string]: it.accent, pointerEvents: thrown && k >= rel ? "none" : "auto" }}
+              animate={thrown ? (k < rel ? { opacity: k === i ? 1 : 0.5, scale: k === i ? 1 : 0.94, y: 0, rotate: 0 } : { opacity: 0, scale: 0.3, y: -150, rotate: -12 }) : undefined}
+              transition={{ type: "spring", stiffness: 220, damping: 17 }}
+            >
               {it.node}
-            </div>
+            </motion.div>
           ))}
         </motion.div>
         <div className="mt-dots">
