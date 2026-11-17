@@ -35,10 +35,11 @@ export function Stack() {
         <AnimatePresence>
           {open && (
             <motion.div className="jc-tools" initial="h" animate="s" variants={{ s: { transition: { staggerChildren: 0.04, delayChildren: 0.5 } } }}>
-              {TOOLS.map((t) => (
+              {TOOLS.map((t, ti) => (
                 <motion.div
                   key={t.t}
                   className="jc-tool"
+                  style={{ ["--d" as string]: `${(ti % 8) * 0.28}s` }}
                   variants={{ h: { opacity: 0, y: 220, scale: 0.3 }, s: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 140, damping: 13 } } }}
                 >
                   <i style={{ background: `linear-gradient(145deg,${t.c},color-mix(in srgb,${t.c} 55%,#000))` }}>{initials(t.t)}</i>
@@ -58,8 +59,13 @@ export function Stack() {
           aria-label={open ? "Close the gift" : "Unwrap my stack"}
           aria-expanded={open}
         >
+          <i className="g-halo" aria-hidden />
+          <i className="g-ring" aria-hidden />
+          <i className="g-ring r2" aria-hidden />
+          {["a", "b", "c", "d", "e", "f"].map((c) => <i key={c} className={`g-spk ${c}`} aria-hidden>✦</i>)}
           <div className="box" />
           <div className="lid" />
+          <span className="g-hint" aria-hidden>Tap to unwrap <b>↓</b></span>
           <div className="tag">A.</div>
           {burst > 0 &&
             Array.from({ length: 26 }, (_, k) => {

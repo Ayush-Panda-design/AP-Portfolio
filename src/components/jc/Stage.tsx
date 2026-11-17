@@ -109,7 +109,7 @@ function Item({ item, i, n, p, vpRef, vp, side, theme, kind, dim, on, onOpen, on
                 <span className="url">{(item.url ?? "").replace(/^https?:\/\//, "").replace(/\/$/, "")}</span>
               </span>
             )}
-            <span className="shot">{item.img && <img src={item.img} alt="" loading="lazy" draggable={false} />}<i className="gl" /></span>
+            <span className="shot">{item.img && <img src={item.img} alt="" decoding="async" draggable={false} />}<i className="gl" /></span>
             <span className="cap"><small>{item.num} · {item.tag}</small><b>{item.title}</b></span>
           </button>
         </div>

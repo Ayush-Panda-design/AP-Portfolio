@@ -17,6 +17,16 @@ export function Work() {
     setShot(0);
   }, [pick]);
   // the popup lives under .jc (not inside this section) so it sits above the fixed UI and keeps the theme vars
+  // decode every screenshot up front so cards never pop in half-painted
+  useEffect(() => {
+    PRODUCTION.forEach((p) => p.screenshots.forEach((s) => {
+      if (!s.src) return;
+      const im = new Image();
+      im.decoding = "async";
+      im.src = s.src;
+      im.decode?.().catch(() => {});
+    }));
+  }, []);
   const [host, setHost] = useState<HTMLElement | null>(null);
   useEffect(() => {
     setHost(document.querySelector<HTMLElement>(".jc") ?? document.body);
@@ -62,7 +72,7 @@ export function Work() {
             label: p.title,
             node: (
               <button className="wk-m-card" onClick={() => setPick(p)}>
-                {p.screenshots[0]?.src && <img src={p.screenshots[0].src} alt="" loading="lazy" />}
+                {p.screenshots[0]?.src && <img src={p.screenshots[0].src} alt="" decoding="async" draggable={false} />}
                 <span className="wk-m-t"><small>{p.num} · {p.tag}</small><b>{p.title}</b></span>
                 <i aria-hidden>↗</i>
               </button>
