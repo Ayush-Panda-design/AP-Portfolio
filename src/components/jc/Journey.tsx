@@ -1,130 +1,65 @@
-import { motion, useAnimationFrame, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Boy } from "./Boy";
 import { ROOMS, type Room } from "./journeyData";
-import { Scene } from "./JourneyScenes";
 import { scrollToY } from "./lib";
 import { MobileTrack } from "./MobileTrack";
 
 const N = ROOMS.length;
 
-/** A cube you can drag, spin, and blow apart. Each face is a technology from the room. */
-function Cube3D({ faces, lit }: { faces: Room["faces"]; lit: boolean }) {
-  const rx = useMotionValue(-22);
-  const ry = useMotionValue(30);
-  const vel = useRef({ x: 0, y: 0 });
-  const drag = useRef<{ x: number; y: number; moved: number } | null>(null);
-  const [boom, setBoom] = useState(false);
-  const [hov, setHov] = useState<number | null>(null);
-
-  useAnimationFrame((_, dt) => {
-    if (!lit) return;
-    const k = dt / 16.7;
-    if (!drag.current) {
-      ry.set(ry.get() + (vel.current.y + (hov === null ? 0.35 : 0.05)) * k);
-      rx.set(rx.get() + vel.current.x * k);
-      vel.current.x *= 0.94;
-      vel.current.y *= 0.94;
-    }
-  });
-
-  const place = [
-    "rotateY(0deg)", "rotateY(90deg)", "rotateY(180deg)", "rotateY(-90deg)", "rotateX(90deg)", "rotateX(-90deg)",
-  ];
-  return (
-    <div className="cube-zone">
-      <div
-        className="cube-stage"
-        onPointerDown={(e) => {
-          drag.current = { x: e.clientX, y: e.clientY, moved: 0 };
-          e.currentTarget.setPointerCapture(e.pointerId);
-        }}
-        onPointerMove={(e) => {
-          const d = drag.current;
-          if (!d) return;
-          const dx = e.clientX - d.x;
-          const dy = e.clientY - d.y;
-          d.x = e.clientX;
-          d.y = e.clientY;
-          d.moved += Math.abs(dx) + Math.abs(dy);
-          ry.set(ry.get() + dx * 0.6);
-          rx.set(rx.get() - dy * 0.6);
-          vel.current = { x: -dy * 0.12, y: dx * 0.12 };
-        }}
-        onPointerUp={() => {
-          if (drag.current && drag.current.moved < 5) setBoom((b) => !b);
-          drag.current = null;
-        }}
-        onPointerLeave={() => setHov(null)}
-      >
-        <div className="ring" />
-        <motion.div className={`cube ${boom ? "boom" : ""}`} style={{ rotateX: rx, rotateY: ry }}>
-          {faces.map((f, i) => (
-            <div key={f.t} className={`face ${hov === i ? "hot" : ""}`} style={{ transform: `${place[i]} translateZ(var(--z))` }} onPointerEnter={() => setHov(i)}>
-              <b>{f.t}</b>
-            </div>
-          ))}
-        </motion.div>
-        <div className="shadow" />
-      </div>
-      <div className="cap" aria-live="polite">{hov !== null ? faces[hov].d : boom ? "Click to put it back together" : "Drag to spin · click to explode"}</div>
-    </div>
-  );
-}
-
-function RoomView({ r, lit, onGo }: { r: Room; lit: boolean; onGo: () => void }) {
+/** The inside of one carriage: a fixed layout, the same for every room. */
+function Carriage({ r, lit, onGo }: { r: Room; lit: boolean; onGo: () => void }) {
   const [mi, setMi] = useState(0);
   const [open, setOpen] = useState(0);
-  const el = useRef<HTMLDivElement>(null);
   const mod = r.mods[mi];
-
-  const move = (e: React.PointerEvent) => {
-    if (!lit || !el.current) return;
-    const b = el.current.getBoundingClientRect();
-    const nx = (e.clientX - b.left) / b.width - 0.5;
-    const ny = (e.clientY - b.top) / b.height - 0.5;
-    el.current.style.setProperty("--nx", nx.toFixed(3));
-    el.current.style.setProperty("--ny", ny.toFixed(3));
-    el.current.style.setProperty("--mx", `${e.clientX - b.left}px`);
-    el.current.style.setProperty("--my", `${e.clientY - b.top}px`);
-  };
-  const leave = () => {
-    el.current?.style.setProperty("--nx", "0");
-    el.current?.style.setProperty("--ny", "0");
+  const sec = mod.sections[open] ?? mod.sections[0];
+  const total = r.mods.reduce((n, m) => n + m.sections.reduce((a, x) => a + x.items.length, 0), 0);
+  const pick = (k: number) => (e: React.SyntheticEvent) => {
+    e.stopPropagation();
+    setOpen(k);
   };
 
   return (
-    <div ref={el} className={`jc-room ${lit ? "lit" : ""}`} style={{ ["--a" as string]: r.accent }} onPointerMove={move} onPointerLeave={leave} onClick={() => !lit && onGo()}>
-      <div className="wall">
-        <div className="cubewrap"><Cube3D faces={r.faces} lit={lit} /></div>
-        <div className="scenewrap"><Scene id={r.scene} /></div>
-      </div>
-      <div className="board">
-        <small>{r.num} · {r.room}</small>
-        <h3>{r.title}</h3>
-        <p>{r.tagline}</p>
-        {r.mods.length > 1 && (
-          <div className="tabs">
-            {r.mods.map((m, k) => (
-              <button key={m.id} className={k === mi ? "on" : ""} onClick={(e) => { e.stopPropagation(); setMi(k); setOpen(0); }}>
-                {m.title}
-              </button>
-            ))}
-          </div>
-        )}
-        <div className="chips">
-          {mod.sections.map((s, k) => (
-            <button key={s.t} className={k === open ? "on" : ""} onMouseEnter={() => lit && setOpen(k)} onClick={(e) => { e.stopPropagation(); setOpen(k); }}>
-              {s.t}
+    <div className={`cb ${lit ? "lit" : ""}`} style={{ ["--a" as string]: r.accent }} onClick={() => !lit && onGo()}>
+      <header className="cb-top">
+        <span className="cb-no">{r.num}</span>
+        <span>{r.room}</span>
+        <span className="cb-meta">{total} topics</span>
+      </header>
+      <h3 className="cb-title">{r.title}</h3>
+      <p className="cb-tag">{r.tagline}</p>
+
+      <div className="cb-tabs">
+        {r.mods.length > 1 ? (
+          r.mods.map((m, k) => (
+            <button key={m.id} className={k === mi ? "on" : ""} onClick={(e) => { e.stopPropagation(); setMi(k); setOpen(0); }}>
+              {m.title}
             </button>
-          ))}
-        </div>
-        <ul key={`${mi}-${open}`}>
-          {(mod.sections[open] ?? mod.sections[0]).items.map((it, i) => (
-            <li key={it} style={{ animationDelay: `${i * 40}ms` }}>{it}</li>
+          ))
+        ) : (
+          <span className="cb-only">Topics covered</span>
+        )}
+      </div>
+
+      <div className="cb-main">
+        <ul className="cb-nav">
+          {mod.sections.map((x, k) => (
+            <li key={x.t}>
+              <button className={k === open ? "on" : ""} onMouseEnter={() => lit && setOpen(k)} onClick={pick(k)}>{x.t}</button>
+            </li>
           ))}
         </ul>
+        <div className="cb-detail" key={`${mi}-${open}`}>
+          <h4>{sec.t}<span>{sec.items.length} {sec.items.length === 1 ? "item" : "items"}</span></h4>
+          <ol>
+            {sec.items.map((it, i) => (
+              <li key={it}><i>{String(i + 1).padStart(2, "0")}</i>{it}</li>
+            ))}
+          </ol>
+        </div>
       </div>
+
+      <footer className="cb-foot"><span>Stack</span>{r.faces.map((f) => f.t).join(" · ")}</footer>
     </div>
   );
 }
@@ -261,7 +196,7 @@ export function Journey() {
     return () => window.removeEventListener("resize", on);
   }, []);
 
-  const W = Math.round(Math.min(vp.w * 0.56, 880));
+  const W = Math.round(Math.min(vp.w * 0.52, 840));
   const E = Math.round(W * 0.62); // engine width
   const PITCH = W + GAP;
   const STEPS = N - 1 + EX;
@@ -354,7 +289,7 @@ export function Journey() {
               <button key={d.id} className={i === active ? "on" : i < active ? "past" : ""} onClick={() => go(i)} aria-label={d.title} title={`${d.num} · ${d.title}`} style={{ ["--a" as string]: d.accent }} />
             ))}
           </div>
-          <span className="jr-hint2">← → to hop carriages · drag the cube</span>
+          <span className="jr-hint2">← → to hop between carriages</span>
         </div>
 
         <div className="jr-ground" aria-hidden />
@@ -366,7 +301,7 @@ export function Journey() {
             <CarSlot key={room.id} i={i} w={W} L={L}>
               <div className="jr-car" style={{ ["--a" as string]: room.accent }}>
                 <div className="roof"><i /><i /></div>
-                <RoomView r={room} lit={i === active} onGo={() => go(i)} />
+                <Carriage r={room} lit={i === active} onGo={() => go(i)} />
                 <div className="skirt"><b>No. {room.num}</b><span>{room.room}</span></div>
                 <Bogie rot={wheel} left="9%" />
                 <Bogie rot={wheel} left="66%" />
