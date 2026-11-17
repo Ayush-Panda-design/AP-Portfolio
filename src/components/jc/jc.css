@@ -1145,11 +1145,22 @@ main.jc[data-mode=day]::before,.jc[data-mode=day] .cc-bg::before,.jc[data-mode=d
 @supports (animation-timeline: view()) {
   @keyframes jcFlow{0%{opacity:0}12%{opacity:1}86%{opacity:1}100%{opacity:0}}
   @keyframes jcFlowPin{0%{opacity:0}5%{opacity:1}90%{opacity:1}100%{opacity:0}}
-  #stack,#about,#life,#recognition{animation:jcFlow linear both;animation-timeline:view();animation-range:cover}
-  .pr-tour,.gh-split,.jr-tour,.jc-tstage,.mt-tour{view-timeline-name:--jcflow;view-timeline-axis:block}
+    .pr-tour,.gh-split,.jr-tour,.jc-tstage,.mt-tour{view-timeline-name:--jcflow;view-timeline-axis:block}
   .pr-in,.gh-sticky,.jr-in,.jc-tstage-in,.mt-in{animation:jcFlowPin linear both;animation-timeline:--jcflow;animation-range:cover}
 }
 @media(prefers-reduced-motion:reduce){
-  #stack,#about,#life,#recognition,.pr-in,.gh-sticky,.jr-in,.jc-tstage-in,.mt-in,.jc-gift,.jc-gift .lid,.jc-tool i{animation:none!important}
+  .pr-in,.gh-sticky,.jr-in,.jc-tstage-in,.mt-in,.jc-gift,.jc-gift .lid,.jc-tool i{animation:none!important}
 }
 .mt-card{backface-visibility:hidden;contain:paint}
+
+/* ---- torn edges between sections ---- */
+.jc-edge{position:relative;height:56px;line-height:0;z-index:3;pointer-events:none;overflow:visible}
+.jc-edge svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 -3px 3px rgba(0,0,0,.45))}
+.jc-edge-dot{position:absolute;left:46%;bottom:6px;width:22px;height:22px;border-radius:50%;background:var(--sun,#FFD66B);box-shadow:0 0 0 4px rgba(0,0,0,.25),0 0 22px rgba(255,214,107,.45);animation:jcEdgeBob 3s ease-in-out infinite}
+@keyframes jcEdgeBob{0%,100%{translate:0 0}50%{translate:0 -5px}}
+.jc[data-mode=day] .jc-edge svg{filter:drop-shadow(0 -3px 3px rgba(60,45,20,.28))}
+.jc-edge + section::before,.jc-edge + footer::before{display:none}
+#stack,#github,#about{background:var(--paper)}
+#process,#recognition,#life{background:var(--paper2)}
+@media(max-width:700px){.jc-edge{height:44px}.jc-edge-dot{width:18px;height:18px;left:50%}}
+@media(prefers-reduced-motion:reduce){.jc-edge-dot{animation:none}}

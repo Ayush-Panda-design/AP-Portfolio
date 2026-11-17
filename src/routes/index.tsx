@@ -10,6 +10,7 @@ import { Journey } from "@/components/jc/Journey";
 import { Work } from "@/components/jc/Work";
 // import { Live } from "@/components/jc/Live"; // hidden for now
 import { Stack } from "@/components/jc/Stack";
+import { Edge } from "@/components/jc/Edge";
 import { Process } from "@/components/jc/Process";
 import { Desk } from "@/components/jc/Desk";
 import { GitHub } from "@/components/jc/GitHub";
@@ -83,12 +84,19 @@ function Index() {
       <Journey />
       <Work />
       {/* <Live /> — hidden for now; component kept in components/jc/Live.tsx */}
+      <Edge from="var(--p-bg)" to="var(--paper)" seed={1} />
       <Stack />
+      <Edge from="var(--paper)" to="var(--paper2)" seed={2} dot />
       <Process />
+      <Edge from="var(--paper2)" to="var(--paper)" seed={3} />
       <GitHub />
+      <Edge from="var(--paper)" to="var(--paper2)" seed={4} />
       <Recognition />
+      <Edge from="var(--paper2)" to="var(--paper)" seed={5} dot />
       <Story />
+      <Edge from="var(--paper)" to="var(--paper2)" seed={6} />
       <Desk />
+      <Edge from="var(--paper2)" to="#0f2a33" seed={7} />
       <Contact />
     </main>
   );
