@@ -1,9 +1,8 @@
-import { motion, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { motion, useMotionValue, useMotionValueEvent, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { Boy } from "./Boy";
 import { ROOMS, type Room } from "./journeyData";
 import { scrollToY } from "./lib";
-import { MobileTrack } from "./MobileTrack";
 
 const N = ROOMS.length;
 
@@ -68,7 +67,6 @@ function Carriage({ r, lit, onGo }: { r: Room; lit: boolean; onGo: () => void })
 /*  The train: every room is a carriage, chained to the next one.      */
 /* ------------------------------------------------------------------ */
 
-const GAP = 64; // distance between carriages (the coupler lives here)
 const EX = 0.75; // extra scroll after the last carriage, to reach the engine
 const WR = 17; // carriage wheel radius
 
@@ -98,10 +96,10 @@ function Bogie({ rot, left }: { rot: MotionValue<number>; left: string }) {
 }
 
 /** Hook + three-link chain joining two carriages. */
-function Coupler({ k, w, L }: { k: number; w: number; L: MotionValue<Lay> }) {
+function Coupler({ k, w, gap, L }: { k: number; w: number; gap: number; L: MotionValue<Lay> }) {
   const x = useTransform(L, (l) => l.c[k] + (w * l.s[k]) / 2 - l.cen - 9);
   return (
-    <motion.svg className="jr-coupler" viewBox="0 0 82 30" style={{ x, width: GAP + 18 }} aria-hidden>
+    <motion.svg className="jr-coupler" viewBox="0 0 82 30" style={{ x, width: gap + 18 }} aria-hidden>
       <rect x="0" y="9" width="10" height="12" rx="2" fill="var(--p-ink2)" /><rect x="72" y="9" width="10" height="12" rx="2" fill="var(--p-ink2)" />
       <rect x="10" y="13.5" width="62" height="3" fill="var(--p-ink2)" />
       <rect x="12" y="8" width="24" height="14" rx="7" fill="none" stroke="var(--p-ink)" strokeWidth="3.4" />
@@ -155,32 +153,6 @@ function CarSlot({ i, w, L, className = "", children }: { i: number; w: number; 
   );
 }
 
-/** Phone version: scrolling slides the rooms sideways while the avatar walks. */
-function JourneyMobile() {
-  return (
-    <section id="journey" data-scene="royal" className="jr-ms">
-      <MobileTrack
-        label="The journey"
-        title="Engineer in the making."
-        hint="Keep scrolling to walk through the rooms"
-        items={ROOMS.map((r) => ({
-          key: r.id,
-          accent: r.accent,
-          label: r.room,
-          node: (
-            <>
-              <small>{r.num} · {r.room}</small>
-              <h3>{r.title}</h3>
-              <p>{r.tagline}</p>
-              <div className="chips">{r.mods.flatMap((m) => m.sections).map((x) => <span key={x.t}>{x.t}</span>)}</div>
-            </>
-          ),
-        }))}
-      />
-    </section>
-  );
-}
-
 export function Journey() {
   const ref = useRef<HTMLElement>(null);
   const [vp, setVp] = useState({ w: 1440, h: 900 });
@@ -196,9 +168,9 @@ export function Journey() {
     return () => window.removeEventListener("resize", on);
   }, []);
 
-  const W = Math.round(Math.min(vp.w * 0.52, 840));
-  const E = Math.round(W * 0.62); // engine width
-  const PITCH = W + GAP;
+  const W = mobile ? Math.round(vp.w * 0.86) : Math.round(Math.min(vp.w * 0.52, 840));
+  const E = mobile ? Math.round(vp.w * 0.7) : Math.round(W * 0.62); // engine width
+  const GAP = mobile ? 40 : 64; // distance between carriages (the coupler lives here)
   const STEPS = N - 1 + EX;
 
   // entrance (section scrolls in) and the pinned tour
@@ -208,16 +180,18 @@ export function Journey() {
   const p = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.35 });
 
   // where every carriage sits: the one in front is full size, the rest are a little smaller; spacing follows size
-  const L = useTransform(p, (v): Lay => {
-    const t = v * STEPS;
+  const dW = useMotionValue(W), dE = useMotionValue(E), dG = useMotionValue(GAP), dS = useMotionValue(STEPS);
+  useEffect(() => { dW.set(W); dE.set(E); dG.set(GAP); dS.set(STEPS); }, [W, E, GAP, STEPS, dW, dE, dG, dS]);
+  const L = useTransform([p, dW, dE, dG, dS], ([v, w0, e0, g0, n0]: number[]): Lay => {
+    const t = v * n0;
     const s: number[] = [], c: number[] = [];
     let x = 0;
     for (let i = 0; i <= N; i++) {
       const si = 1 - 0.12 * Math.min(1, Math.abs(t - i));
-      const w = i < N ? W : E;
+      const w = i < N ? w0 : e0;
       s.push(si);
       c.push(x + (w * si) / 2);
-      x += w * si + GAP;
+      x += w * si + g0;
     }
     const i0 = Math.min(N, Math.floor(t));
     const i1 = Math.min(N, i0 + 1);
@@ -230,10 +204,10 @@ export function Journey() {
   const boyX = useTransform(rv, [0, 1], ["-34vw", "0vw"]);
   const walkP = useTransform([rv, p], ([a, b]) => (b as number) - 0.07 * (1 - (a as number)));
   // ground runs faster than the carriages move on screen, so the train rolls forward while the avatar gains on it
-  const groundPx = useTransform(walkP, (v) => -(v * STEPS * PITCH * 1.35));
+  const groundPx = useTransform([walkP, dW, dG, dS], ([v, w0, g0, n0]: number[]) => -(v * n0 * (w0 + g0) * 1.35));
   const floorPos = useTransform(groundPx, (v) => `${v}px 0`);
   const dashPos = useTransform(groundPx, (v) => `${v * 1.15}px 0`);
-  const wheel = useTransform(walkP, (v) => ((v * STEPS * PITCH * 0.35) / WR) * 57.2958);
+  const wheel = useTransform([walkP, dW, dG, dS], ([v, w0, g0, n0]: number[]) => ((v * n0 * (w0 + g0) * 0.35) / WR) * 57.2958);
 
   useMotionValueEvent(p, "change", (v) => {
     const best = Math.max(0, Math.min(N - 1, Math.round(v * STEPS)));
@@ -276,11 +250,9 @@ export function Journey() {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobile]);
 
-  if (mobile) return <JourneyMobile />;
-
   const r = ROOMS[active];
   return (
-    <section id="journey" data-scene="royal" ref={ref} className="jr-tour" style={{ height: `${N * 46 + 100}vh` }}>
+    <section id="journey" data-scene="royal" ref={ref} className="jr-tour" style={{ height: `${N * (mobile ? 38 : 46) + 100}vh` }}>
       <div className="jr-in" style={{ ["--a" as string]: r.accent }}>
         <div className="jr-head">
           <span className="jc-label">The journey · carriage {r.num} of {String(N).padStart(2, "0")}</span>
@@ -289,7 +261,7 @@ export function Journey() {
               <button key={d.id} className={i === active ? "on" : i < active ? "past" : ""} onClick={() => go(i)} aria-label={d.title} title={`${d.num} · ${d.title}`} style={{ ["--a" as string]: d.accent }} />
             ))}
           </div>
-          <span className="jr-hint2">← → to hop between carriages</span>
+          <span className="jr-hint2">{mobile ? "Keep scrolling to ride the train" : "← → to hop between carriages"}</span>
         </div>
 
         <div className="jr-ground" aria-hidden />
@@ -308,7 +280,7 @@ export function Journey() {
               </div>
             </CarSlot>
           ))}
-          {ROOMS.map((room, k) => <Coupler key={`c${k}`} k={k} w={W} L={L} />)}
+          {ROOMS.map((room, k) => <Coupler key={`c${k}`} k={k} w={W} gap={GAP} L={L} />)}
           <CarSlot i={N} w={E} L={L} className="eng">
             <Engine rot={wheel} />
           </CarSlot>
