@@ -1203,3 +1203,52 @@ main.jc[data-mode=day]::before,.jc[data-mode=day] .cc-bg::before,.jc[data-mode=d
 .pr-core b i{font-style:normal;opacity:.35}
 .pr-core span{font:600 11px ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;opacity:.6}
 @media(max-width:899px){.pr-track .base{stroke-dasharray:2 7}}
+
+/* ---- Journey as a train: flat shapes, no gradients, glows or blur ---- */
+.jr-head{gap:7px}
+.jr-hint2{font-size:12px;color:var(--p-ink2);pointer-events:none}
+.jr-doors{gap:0;align-items:center;margin-top:2px}
+.jr-doors button{position:relative;width:26px;height:16px;border-radius:4px;background:var(--p-line);transition:background .3s,transform .3s var(--spring)}
+.jr-doors button+button{margin-left:8px}
+.jr-doors button+button::before{content:"";position:absolute;left:-8px;top:7px;width:8px;height:2px;background:var(--p-ink2)}
+.jr-doors button::after{content:"";position:absolute;left:4px;right:4px;bottom:-4px;height:4px;border-radius:0 0 4px 4px;background:var(--p-ink2);opacity:.5}
+.jr-doors button.past{background:color-mix(in srgb,var(--a) 55%,#555)}
+.jr-doors button.on{width:34px;background:var(--a);transform:translateY(-2px)}
+.jr-doors button:hover{transform:translateY(-3px)}
+
+.jr-ground{position:absolute;left:0;right:0;top:72vh;bottom:0;background:var(--p-floor1);z-index:1;pointer-events:none}
+.jr-track2{position:absolute;left:0;right:0;top:72vh;height:24px;z-index:1;pointer-events:none;border-top:4px solid var(--p-ink2);background-image:repeating-linear-gradient(90deg,var(--p-floor2) 0 18px,transparent 18px 62px);background-size:62px 100%;background-repeat:repeat-x}
+.jr-dashes{position:absolute;left:0;right:0;bottom:7vh;height:5px;z-index:1;pointer-events:none;background-image:repeating-linear-gradient(90deg,var(--p-line) 0 46px,transparent 46px 130px)}
+
+.jr-train{position:absolute;left:62%;top:17vh;height:55vh;width:0;z-index:2;will-change:transform}
+.jr-slot2{position:absolute;left:0;bottom:0;height:100%;transform-origin:50% 100%;will-change:transform,filter}
+.jr-coupler{position:absolute;left:0;bottom:50px;height:30px;z-index:4;pointer-events:none;overflow:visible}
+
+.jr-car{position:relative;height:100%;display:flex;flex-direction:column;--wire:color-mix(in srgb,var(--p-ink) 38%,transparent)}
+.jr-car::before,.jr-car::after{content:"";position:absolute;bottom:48px;width:10px;height:26px;border-radius:3px;background:var(--p-ink2);z-index:2}
+.jr-car::before{left:-10px;border-radius:4px 0 0 4px}
+.jr-car::after{right:-10px;border-radius:0 4px 4px 0}
+.jr-car .roof{position:relative;flex:none;height:12px;margin:0 20px;border-radius:10px 10px 0 0;background:var(--p-ink2)}
+.jr-car .roof i{position:absolute;top:-6px;width:38px;height:7px;border-radius:4px 4px 0 0;background:var(--p-ink2)}
+.jr-car .roof i:nth-child(1){left:18%}.jr-car .roof i:nth-child(2){right:18%}
+.jr-car .jc-room,.jc[data-mode=day] .jr-car .jc-room:not(.lit){flex:1;min-height:0;width:100%;height:auto;filter:none;opacity:1;transform:none;background:var(--p-card);border:3px solid var(--wire);border-radius:14px 14px 3px 3px;box-shadow:none;transition:border-color .4s}
+.jr-car .jc-room.lit{border-color:var(--a);box-shadow:none}
+.jr-car .jc-room .spot{display:none}
+.jr-car .skirt{flex:none;height:16px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:var(--a);color:#161616;font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:0 0 2px 2px}
+.jr-car .skirt span{opacity:.75}
+.jr-car::after{z-index:2}
+.jr-car>.skirt+.jr-bogie{left:9%}
+.jr-car>*:last-child{margin-bottom:0}
+.jr-car{padding-bottom:46px}
+.jr-bogie{position:absolute;bottom:0;width:150px;height:46px;overflow:visible;z-index:1}
+.jr-engine{display:block;width:100%;height:auto;overflow:visible}
+.jr-slot2.eng{height:auto;display:flex;align-items:flex-end}
+.jr-puff{animation:jr-puff 3.4s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}
+@keyframes jr-puff{0%{opacity:.55;transform:translate(0,0) scale(.5)}100%{opacity:0;transform:translate(-90px,-120px) scale(2.2)}}
+
+.jr-car .cube .face{background:var(--p-card2);box-shadow:none}
+.jr-car .cube .face.hot{background:var(--a);box-shadow:none}
+.jr-car .cube-stage .shadow{background:var(--p-line);height:9px}
+.jr-car .jc-room.lit .jr-svg .pr:hover{filter:none}
+.jr-in::before{opacity:.04}
+.jr-boywrap{z-index:6}
