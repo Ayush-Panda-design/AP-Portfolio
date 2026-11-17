@@ -651,17 +651,43 @@ main.jc[data-mode=day]::before,.jc[data-mode=day] .cc-bg::before,.jc[data-mode=d
 @media(max-width:900px){.gh-top{grid-template-columns:1fr}.gh-tiles{grid-template-columns:1fr 1fr}.gh-cols{grid-template-columns:1fr}.gh-say{left:62%}}
 @media(max-width:560px){.gh-repos{grid-template-columns:1fr}}
 /* ---- recognition + open to work ---- */
-.rc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));max-width:900px;margin-inline:auto;gap:16px;margin-top:34px}
-.rc-card{padding:22px 24px 24px;border-radius:22px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden;transition:transform .35s var(--spring),border-color .3s}
-.rc-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--a)}
-.rc-card:hover{transform:translateY(-6px);border-color:var(--a)}
-.rc-card small{font-weight:800;color:var(--a);font-size:12px;letter-spacing:.03em}
-.rc-card h3{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(16px,1.5vw,20px);line-height:1.15;letter-spacing:-.02em;margin:6px 0 8px}
-.rc-card p{margin:0;font-size:14px;line-height:1.55;color:var(--ink2)}
-.rc-card .lk{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.rc-card .lk a{font-size:12.5px;font-weight:700;padding:.4em .9em;border-radius:99px;border:1px solid var(--line)}
-.rc-card .lk a:hover{border-color:var(--a)}
-@media(max-width:900px){.rc-grid{grid-template-columns:1fr}}
+.jc-sec.rc2{height:400vh;padding:0;overflow:visible}
+.rc2-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,1.6vh,18px);padding-bottom:70px}
+.rc2-head{text-align:center;position:relative;z-index:8}
+.rc2-title{font-family:Unbounded,"Bricolage Grotesque",sans-serif;font-weight:900;font-size:clamp(24px,3.8vw,52px);letter-spacing:-.035em;line-height:1.05;margin:.3em 0 0;color:var(--ink)}
+.rc2-stage{position:relative;container-type:inline-size;width:min(1160px,94vw,calc((100vh - 220px) * 1.786));aspect-ratio:1000/560}
+.rc2-piece{position:absolute;left:var(--l);top:var(--t);width:var(--w);will-change:transform,opacity}
+.rc2-piece.room{height:100%;border-radius:clamp(16px,2.4cqw,30px);background:radial-gradient(60% 50% at 30% 60%,rgba(255,196,96,.1),transparent 70%),repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 2px,transparent 2px 46px),linear-gradient(180deg,#232a3d,#171b29);border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 80px -36px rgba(0,0,0,.8)}
+.rc2-piece.room span{display:block}
+.rc2-svg{display:block;width:100%;height:auto;overflow:visible}
+.rc2-piece.room,.rc2-piece.room *{pointer-events:none}
+.rc2-tw{animation:ct-tw 3s ease-in-out infinite}
+.rc2-min{transform-origin:40px 40px;animation:rc2-spin 24s linear infinite}
+@keyframes rc2-spin{to{transform:rotate(360deg)}}
+.rc2-steam{animation:rc2-steam 2.4s ease-in-out infinite}
+@keyframes rc2-steam{0%{opacity:0;transform:translate(0,12px)}40%{opacity:.8}100%{opacity:0;transform:translate(2px,-4px)}}
+.rc2-cone{animation:rc2-flick 4s ease-in-out infinite}
+@keyframes rc2-flick{50%{opacity:.65}}
+.rc2-bob{animation:rc2-bob 3.2s ease-in-out infinite}
+@keyframes rc2-bob{50%{transform:translateY(-6px)}}
+.rc2-bubble{position:relative;display:inline-block;white-space:nowrap;background:var(--bg,#fff);color:#17171a;font-weight:800;font-size:1.25cqw;padding:.55em .95em;border-radius:14px;box-shadow:0 10px 22px -10px rgba(0,0,0,.7)}
+.rc2-bubble::after{content:"";position:absolute;left:18%;bottom:-.45em;width:.9em;height:.9em;background:var(--bg,#fff);transform:rotate(45deg);border-radius:2px}
+.rc2-card{position:relative;font-size:1.22cqw;padding:1.5em 1.5em 1.4em;border-radius:1.5em;background:linear-gradient(180deg,#2c3347,#222839);border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 30px -16px rgba(0,0,0,.8);color:#f5f2ea}
+.rc2-card::before{content:"";position:absolute;left:0;top:1.2em;bottom:1.2em;width:.3em;border-radius:0 .3em .3em 0;background:var(--a)}
+.rc2-card::after{content:"";position:absolute;left:50%;top:-.55em;width:1.1em;height:1.1em;margin-left:-.55em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a80,#d6452b);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.rc2-card small{font-weight:800;color:var(--a);font-size:.85em;letter-spacing:.03em}
+.rc2-card h3{font-family:Unbounded,sans-serif;font-weight:900;font-size:1.32em;line-height:1.15;letter-spacing:-.02em;margin:.4em 0 .5em}
+.rc2-card p{margin:0;font-size:1em;line-height:1.5;color:#c4c0b6}
+.rc2-card .lk{display:flex;gap:.5em;flex-wrap:wrap;margin-top:1em}
+.rc2-card .lk a{font-size:.92em;font-weight:700;padding:.4em .9em;border-radius:99px;border:1px solid rgba(255,255,255,.22);color:#f5f2ea;transition:transform .3s var(--spring),border-color .2s}
+.rc2-card .lk a:hover{transform:translateY(-2px);border-color:var(--a)}
+@media(max-width:760px){
+  .rc2-stage{aspect-ratio:1000/1580;width:min(94vw,calc((100vh - 200px) * .633))}
+  .rc2-piece{left:var(--ml,var(--l));top:var(--mt,var(--t));width:var(--mw,var(--w))}
+  .rc2-piece.nom{display:none}
+  .rc2-bubble{font-size:3cqw}
+  .rc2-card{font-size:3.3cqw}
+}
 .jc-open{display:inline-flex;align-items:center;gap:10px;padding:.55em 1.1em;border-radius:99px;border:1px solid var(--line);background:var(--card);font-weight:700;font-size:14px;margin-bottom:10px}
 .jc-open i{width:10px;height:10px;border-radius:50%;background:#34d399;animation:jc-pulse 2s infinite}
 
@@ -693,7 +719,6 @@ main.jc[data-mode=day]::before,.jc[data-mode=day] .cc-bg::before,.jc[data-mode=d
 .me-buddy{position:relative;width:100%;aspect-ratio:4/5}
 .gh-bot .me-buddy{width:100%}
 .me-wave{width:min(190px,48vw);margin:6px auto 0}
-.rc-me{width:min(170px,44vw);margin:-6px auto 4px}
 .gh-bot{width:min(210px,52vw)}
 
 /* ---- Hero: Swagatam ---- */
