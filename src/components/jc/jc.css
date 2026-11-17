@@ -657,7 +657,7 @@ main.jc[data-mode=day]::before,.jc[data-mode=day] .cc-bg::before,.jc[data-mode=d
 .rc2-title{font-family:Unbounded,"Bricolage Grotesque",sans-serif;font-weight:900;font-size:clamp(24px,3.8vw,52px);letter-spacing:-.035em;line-height:1.05;margin:.3em 0 0;color:var(--ink)}
 .rc2-stage{position:relative;container-type:inline-size;width:min(1160px,94vw,calc((100vh - 220px) * 1.786));aspect-ratio:1000/560}
 .rc2-piece{position:absolute;left:var(--l);top:var(--t);width:var(--w);will-change:transform,opacity}
-.rc2-piece.room{height:100%;border-radius:clamp(16px,2.4cqw,30px);background:radial-gradient(60% 50% at 30% 60%,rgba(255,196,96,.1),transparent 70%),repeating-linear-gradient(90deg,rgba(255,255,255,.018) 0 2px,transparent 2px 46px),linear-gradient(180deg,#232a3d,#171b29);border:1px solid rgba(255,255,255,.1);box-shadow:0 40px 80px -36px rgba(0,0,0,.8)}
+.rc2-piece.room{height:100%;border-radius:clamp(16px,2.4cqw,30px);background:radial-gradient(50% 45% at 18% 62%,rgba(255,214,107,.05),transparent 70%),repeating-linear-gradient(90deg,rgba(255,255,255,.014) 0 2px,transparent 2px 46px),#232323;border:1px solid rgba(255,255,255,.09);box-shadow:0 40px 80px -36px rgba(0,0,0,.8)}
 .rc2-piece.room span{display:block}
 .rc2-svg{display:block;width:100%;height:auto;overflow:visible}
 .rc2-piece.room,.rc2-piece.room *{pointer-events:none}
@@ -672,9 +672,9 @@ main.jc[data-mode=day]::before,.jc[data-mode=day] .cc-bg::before,.jc[data-mode=d
 @keyframes rc2-bob{50%{transform:translateY(-6px)}}
 .rc2-bubble{position:relative;display:inline-block;white-space:nowrap;background:var(--bg,#fff);color:#17171a;font-weight:800;font-size:1.25cqw;padding:.55em .95em;border-radius:14px;box-shadow:0 10px 22px -10px rgba(0,0,0,.7)}
 .rc2-bubble::after{content:"";position:absolute;left:18%;bottom:-.45em;width:.9em;height:.9em;background:var(--bg,#fff);transform:rotate(45deg);border-radius:2px}
-.rc2-card{position:relative;font-size:1.22cqw;padding:1.5em 1.5em 1.4em;border-radius:1.5em;background:linear-gradient(180deg,#2c3347,#222839);border:1px solid rgba(255,255,255,.14);box-shadow:0 18px 30px -16px rgba(0,0,0,.8);color:#f5f2ea}
+.rc2-card{position:relative;font-size:1.22cqw;padding:1.5em 1.5em 1.4em;border-radius:1.5em;background:#2b2b2b;border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 30px -16px rgba(0,0,0,.8);color:#f5f2ea}
 .rc2-card::before{content:"";position:absolute;left:0;top:1.2em;bottom:1.2em;width:.3em;border-radius:0 .3em .3em 0;background:var(--a)}
-.rc2-card::after{content:"";position:absolute;left:50%;top:-.55em;width:1.1em;height:1.1em;margin-left:-.55em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a80,#d6452b);box-shadow:0 2px 4px rgba(0,0,0,.6)}
+.rc2-card::after{content:"";position:absolute;left:50%;top:-.55em;width:1.1em;height:1.1em;margin-left:-.55em;border-radius:50%;background:#d96a4f;box-shadow:0 2px 3px rgba(0,0,0,.5)}
 .rc2-card small{font-weight:800;color:var(--a);font-size:.85em;letter-spacing:.03em}
 .rc2-card h3{font-family:Unbounded,sans-serif;font-weight:900;font-size:1.32em;line-height:1.15;letter-spacing:-.02em;margin:.4em 0 .5em}
 .rc2-card p{margin:0;font-size:1em;line-height:1.5;color:#c4c0b6}
