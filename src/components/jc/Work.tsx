@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "@tanstack/react-router";
 import { XIcon } from "lucide-react";
 import { PRODUCTION, type ProductionProject } from "@/data/projects";
@@ -14,6 +15,16 @@ export function Work() {
 
   useEffect(() => {
     setShot(0);
+  }, [pick]);
+  // the popup lives under .jc (not inside this section) so it sits above the fixed UI and keeps the theme vars
+  const [host, setHost] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    setHost(document.querySelector<HTMLElement>(".jc") ?? document.body);
+  }, []);
+  useEffect(() => {
+    if (!pick) return;
+    window.__lenis?.stop();
+    return () => window.__lenis?.start();
   }, [pick]);
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setPick(null);
@@ -60,9 +71,10 @@ export function Work() {
         />
       </div>
 
+      {host && createPortal(
       <AnimatePresence>
         {pick && (
-          <motion.div className="jc-pop-ov" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPick(null)}>
+          <motion.div className="jc-pop-ov" data-lenis-prevent initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPick(null)}>
             <motion.div
               className="jc-pop"
               style={{ ["--a" as string]: acc }}
@@ -105,9 +117,12 @@ export function Work() {
                 </div>
               </div>
             </motion.div>
+            <button className="jc-pop-x" onClick={(e) => { e.stopPropagation(); setPick(null); }} aria-label="Close"><XIcon size={20} /></button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      host,
+      )}
     </section>
   );
 }
