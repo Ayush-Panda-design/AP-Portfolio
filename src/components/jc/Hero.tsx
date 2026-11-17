@@ -46,7 +46,7 @@ export function Hero({ ready = true }: { ready?: boolean }) {
     <header id="top" className="jc-hero h2" data-scene="home">
       <div className="h2-stage">
         {/* scene: pulls in from a soft focus once the curtains open */}
-        <motion.div className="h2-intro" initial={{ scale: 1.18, filter: "blur(14px)", opacity: 0 }} animate={ready ? { scale: 1, filter: "blur(0px)", opacity: 1 } : {}} transition={{ duration: 2.4, ease: EASE }}>
+        <motion.div className="h2-intro" initial={{ scale: 1.1, opacity: 0 }} animate={ready ? { scale: 1, opacity: 1 } : {}} transition={{ duration: 1.3, ease: EASE }}>
           <motion.div className="h2-bg" style={{ scale: bgScale, y: bgY }}>
             <div className="h2-drift">
             <motion.div className="h2-par" style={{ x: sx, y: sy }}>
@@ -78,24 +78,24 @@ export function Hero({ ready = true }: { ready?: boolean }) {
             {HEADLINE.map((w, i) => (
               <span key={i} className="h2-line-w">
                 <span className="w">
-                  <motion.span initial={{ y: "115%", rotate: 4 }} animate={ready ? { y: 0, rotate: 0 } : {}} transition={{ duration: 1, delay: 0.9 + i * 0.09, ease: EASE }}>
+                  <motion.span initial={{ y: "115%", rotate: 4 }} animate={ready ? { y: 0, rotate: 0 } : {}} transition={{ duration: 0.8, delay: 0.25 + i * 0.07, ease: EASE }}>
                     {i === 5 ? (
                       <span className="h2-ship">
                         {w}
                         <svg viewBox="0 0 200 18" preserveAspectRatio="none" aria-hidden>
-                          <motion.path d="M3 12 C 40 4, 90 3, 150 9 S 190 13, 197 8" fill="none" stroke="var(--sun,#FFD66B)" strokeWidth="5" strokeLinecap="round" initial={{ pathLength: 0 }} animate={ready ? { pathLength: 1 } : {}} transition={{ duration: 0.9, delay: 1.9, ease: EASE }} />
+                          <motion.path d="M3 12 C 40 4, 90 3, 150 9 S 190 13, 197 8" fill="none" stroke="var(--sun,#FFD66B)" strokeWidth="5" strokeLinecap="round" initial={{ pathLength: 0 }} animate={ready ? { pathLength: 1 } : {}} transition={{ duration: 0.7, delay: 0.95, ease: EASE }} />
                         </svg>
                       </span>
                     ) : (
                       w
                     )}
-                    {i === 5 && <motion.b className="h2-dot" initial={{ scale: 0 }} animate={ready ? { scale: 1 } : {}} transition={{ type: "spring", stiffness: 300, damping: 10, delay: 2.1 }}>.</motion.b>}
+                    {i === 5 && <motion.b className="h2-dot" initial={{ scale: 0 }} animate={ready ? { scale: 1 } : {}} transition={{ type: "spring", stiffness: 300, damping: 10, delay: 1.05 }}>.</motion.b>}
                   </motion.span>
                 </span>{" "}
               </span>
             ))}
           </h1>
-          <motion.div className="h2-cta" initial={{ opacity: 0, y: 14 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ delay: 2.0, duration: 0.8, ease: EASE }}>
+          <motion.div className="h2-cta" initial={{ opacity: 0, y: 14 }} animate={ready ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.9, duration: 0.6, ease: EASE }}>
             <Magnetic><button className="jc-btn sun h2-b1" onClick={() => scrollToId("work")}>See my work ↓</button></Magnetic>
             <Magnetic><button className="jc-btn ghost h2-b2" onClick={() => scrollToId("contact")}>Say hi</button></Magnetic>
           </motion.div>
