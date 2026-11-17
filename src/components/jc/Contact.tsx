@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useScroll, useSpring, useTransform, type MotionValue } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Magnetic, scrollToY } from "./lib";
 
 const EMAIL = "pandaayush25305@gmail.com";
@@ -13,7 +13,33 @@ const LINKS = [
 ];
 const AVATARS = ["#FFD23F", "#FF6B4A", "#9FD3FF", "#B7A2FF", "#4F9E4A"];
 
+// depth: 0 = far (slow, small, faint) … 1 = near (fast, grows toward you as you scroll down)
+const CLOUDS = [
+  { x: -8, y: 4, w: 46, d: 0.25, o: 0.5 }, { x: 58, y: 10, w: 40, d: 0.3, o: 0.5 },
+  { x: 20, y: 30, w: 52, d: 0.55, o: 0.75 }, { x: 70, y: 46, w: 56, d: 0.6, o: 0.8 },
+  { x: -14, y: 58, w: 62, d: 0.9, o: 1 }, { x: 52, y: 78, w: 70, d: 1, o: 1 },
+];
+
+function Puff({ c, p }: { c: (typeof CLOUDS)[number]; p: MotionValue<number> }) {
+  const y = useTransform(p, [0, 1], [`${c.d * 70}vh`, `${-c.d * 90}vh`]);
+  const x = useTransform(p, [0, 1], [`${(c.x < 40 ? -1 : 1) * c.d * 6}vw`, `${(c.x < 40 ? 1 : -1) * c.d * 8}vw`]);
+  const scale = useTransform(p, [0, 1], [0.5 + c.d * 0.2, 0.75 + c.d * 0.5]);
+  const op = useTransform(p, [0, 0.18, 0.85, 1], [0, c.o * 0.55, c.o * 0.55, c.o * 0.35]);
+  return (
+    <motion.svg className="ct2-puff" viewBox="0 0 400 160" style={{ left: `${c.x}%`, top: `${c.y}%`, width: `${c.w}vw`, x, y, scale, opacity: op }} aria-hidden>
+      <g fill={c.d > 0.7 ? "#5d667c" : "#444c62"}>
+        <ellipse cx="200" cy="112" rx="190" ry="40" />
+        <circle cx="120" cy="88" r="52" /><circle cx="205" cy="64" r="66" /><circle cx="292" cy="88" r="50" />
+        <circle cx="60" cy="108" r="34" /><circle cx="345" cy="106" r="36" />
+      </g>
+    </motion.svg>
+  );
+}
+
 export function Contact() {
+  const secRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: secRef, offset: ["start end", "end start"] });
+  const p = useSpring(scrollYProgress, { stiffness: 90, damping: 24, mass: 0.5 });
   const [toast, setToast] = useState("");
   const [modal, setModal] = useState(false);
   const [name, setName] = useState("");
@@ -54,10 +80,10 @@ export function Contact() {
   };
 
   return (
-    <footer id="contact" data-scene="forth" className="jc-sec jc-contact ct2">
+    <footer id="contact" data-scene="forth" className="jc-sec jc-contact ct2" ref={secRef}>
       <div className="ct2-sky" aria-hidden>
         {stars.map((st, i) => <i key={i} className="ct-star" style={{ left: `${st.x}%`, top: `${st.y}%`, width: st.s, height: st.s, animationDelay: `${st.d}s` }} />)}
-        <i className="ct2-cloud c1" /><i className="ct2-cloud c2" /><i className="ct2-cloud c3" />
+        {CLOUDS.map((c, i) => <Puff key={i} c={c} p={p} />)}
       </div>
       <div className="ct2-in">
         <motion.h2 className="ct2-h" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
