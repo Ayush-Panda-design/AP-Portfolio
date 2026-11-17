@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { GoogleAnalytics } from "../components/portfolio/GoogleAnalytics";
+import { VercelAnalytics } from "../components/portfolio/VercelAnalytics";
 import { PageTransition } from "../components/portfolio/PageTransition";
 
 function NotFoundComponent() {
@@ -120,6 +121,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <GoogleAnalytics />
+      <VercelAnalytics />
       <PageTransition>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
