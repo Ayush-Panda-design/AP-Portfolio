@@ -1,17 +1,15 @@
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { MeBuddy } from "./MeBuddy";
-import { EASE, Magnetic, Reveal, SecHead, scrollToY } from "./lib";
-import { setHot } from "./bus";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
+import { Magnetic, scrollToY } from "./lib";
 
 const EMAIL = "pandaayush25305@gmail.com";
 const LINKS = [
-  { k: "M", label: "Email", href: `mailto:${EMAIL}` },
-  { k: "G", label: "GitHub", href: "https://github.com/Ayush-Panda-design" },
-  { k: "L", label: "LinkedIn", href: "https://www.linkedin.com/in/ayush-panda-a04280215/" },
-  { k: "X", label: "X / Twitter", href: "https://x.com/AyushPanda85699" },
-  { k: "H", label: "Hashnode", href: "https://hashnode.com/@Ayush-Panda" },
-  { k: "R", label: "Resume", href: "/resume/Ayush_Panda_Resume.pdf" },
+  { k: "M", label: "Email", href: `mailto:${EMAIL}`, c: "#EF4B3F", c2: "#B42318", cap: "Say hi. I reply fast." },
+  { k: "G", label: "GitHub", href: "https://github.com/Ayush-Panda-design", c: "#3A3F4B", c2: "#171A21", cap: "Where I build in public." },
+  { k: "L", label: "LinkedIn", href: "https://www.linkedin.com/in/ayush-panda-a04280215/", c: "#2F7BEA", c2: "#1B4FA8", cap: "Let's connect." },
+  { k: "X", label: "X / Twitter", href: "https://x.com/AyushPanda85699", c: "#6B46E5", c2: "#43279F", cap: "Thoughts & updates." },
+  { k: "H", label: "Hashnode", href: "https://hashnode.com/@Ayush-Panda", c: "#2A5BFF", c2: "#1738B3", cap: "Things I write." },
+  { k: "R", label: "Resume", href: "/resume/Ayush_Panda_Resume.pdf", c: "#FFD23F", c2: "#C99A12", cap: "Hire me. Grab my resume.", dark: true },
 ];
 const AVATARS = ["#FFD23F", "#FF6B4A", "#9FD3FF", "#B7A2FF", "#4F9E4A"];
 
@@ -21,29 +19,8 @@ export function Contact() {
   const [name, setName] = useState("");
   const [msg, setMsg] = useState("");
   const [av, setAv] = useState(0);
-  const secRef = useRef<HTMLElement>(null);
-  const walk = useRef(1);
-  const [live, setLive] = useState(false);
-  const { scrollYProgress } = useScroll({ target: secRef, offset: ["start start", "end end"] });
-  const p = useSpring(scrollYProgress, { stiffness: 110, damping: 26, mass: 0.4 });
-  useMotionValueEvent(p, "change", (v) => {
-    walk.current = v < 0.62 ? 1 : Math.max(0, 1 - (v - 0.62) / 0.12);
-    setLive(v > 0.66);
-  });
-  const stars = useMemo(() => Array.from({ length: 46 }, (_, i) => ({ x: (i * 53.7) % 100, y: (i * 29.3) % 52, s: 1 + (i % 3), d: (i % 7) * 0.5 })), []);
-  const sceneY = useTransform(p, [0, 1], ["0%", "-6%"]);
-  const dune1 = useTransform(p, [0, 1], ["0%", "-9%"]);
-  const dune2 = useTransform(p, [0, 1], ["0%", "-4%"]);
-  const portalScale = useTransform(p, [0, 0.5, 0.78, 1], [1, 1.25, 3.2, 3.6]);
-  const portalOp = useTransform(p, [0.7, 0.9], [1, 0.55]);
-  const skyDark = useTransform(p, [0.4, 0.85], [0, 0.78]);
-  const meScale = useTransform(p, [0, 0.62, 0.74], [1, 0.46, 0.2]);
-  const meY = useTransform(p, [0, 0.62, 0.74], ["0vh", "-12vh", "-17vh"]);
-  const meOp = useTransform(p, [0.6, 0.74], [1, 0]);
-  const flashOp = useTransform(p, [0.6, 0.72, 0.86], [0, 0.85, 0]);
-  const introOp = useTransform(p, [0, 0.08, 0.3, 0.42], [0, 1, 1, 0]);
-  const bodyOp = useTransform(p, [0.7, 0.86], [0, 1]);
-  const bodyY = useTransform(p, [0.7, 0.9], ["36px", "0px"]);
+
+  const stars = useMemo(() => Array.from({ length: 46 }, (_, i) => ({ x: (i * 53.7) % 100, y: (i * 29.3) % 80, s: 1 + (i % 3), d: (i % 7) * 0.5 })), []);
 
   const flash = (t: string) => {
     setToast(t);
@@ -77,43 +54,35 @@ export function Contact() {
   };
 
   return (
-    <footer id="contact" data-scene="forth" className="jc-sec jc-contact ct-scene" style={{ position: "relative" }} ref={secRef}>
-      <div className="ct-sticky">
-        <motion.div className="ct-sky" style={{ y: sceneY }}>
-          {stars.map((st, i) => <i key={i} className="ct-star" style={{ left: `${st.x}%`, top: `${st.y}%`, width: st.s, height: st.s, animationDelay: `${st.d}s` }} />)}
-        </motion.div>
-        <motion.div className="ct-portal" style={{ scale: portalScale, opacity: portalOp }} aria-hidden>
-          <i className="ct-halo" /><i className="ct-ring" /><i className="ct-gal g1" /><i className="ct-gal g2" /><i className="ct-core" />
-        </motion.div>
-        <motion.svg className="ct-dune d2" viewBox="0 0 1440 300" preserveAspectRatio="none" style={{ y: dune2 }} aria-hidden>
-          <path d="M0 170 C200 110 360 140 560 150 C800 165 980 90 1200 120 C1320 136 1400 150 1440 140 L1440 300 L0 300Z" />
-        </motion.svg>
-        <motion.svg className="ct-dune d1" viewBox="0 0 1440 300" preserveAspectRatio="none" style={{ y: dune1 }} aria-hidden>
-          <path d="M0 150 C220 210 420 120 700 160 C960 196 1160 110 1440 170 L1440 300 L0 300Z" />
-        </motion.svg>
-        <motion.div className="ct-me" style={{ scale: meScale, y: meY, opacity: meOp }}>
-          <MeBuddy back mood="idle" walkRef={walk} />
-        </motion.div>
-        <motion.div className="ct-flash" style={{ opacity: flashOp }} aria-hidden />
-        <motion.div className="ct-fade" style={{ opacity: skyDark }} aria-hidden />
+    <footer id="contact" data-scene="forth" className="jc-sec jc-contact ct2">
+      <div className="ct2-sky" aria-hidden>
+        {stars.map((st, i) => <i key={i} className="ct-star" style={{ left: `${st.x}%`, top: `${st.y}%`, width: st.s, height: st.s, animationDelay: `${st.d}s` }} />)}
+        <i className="ct2-cloud c1" /><i className="ct2-cloud c2" /><i className="ct2-cloud c3" />
+      </div>
+      <div className="ct2-in">
+        <motion.h2 className="ct2-h" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}>
+          Let&apos;s make<br />something<br />nobody<br /><span className="ct2-hl"><span>rage quits.</span></span>
+        </motion.h2>
+        <p className="ct2-sub">Open to SDE internships, freelance work &amp; full-time roles. <b>I reply fast.</b></p>
+        <div className="ct2-acts">
+          <Magnetic><button className="ct2-btn sun" onClick={() => setModal(true)}>Leave a note</button></Magnetic>
+          <Magnetic><button className="ct2-btn" onClick={copy}>Copy email</button></Magnetic>
+        </div>
 
-        <motion.p className="ct-intro" style={{ opacity: introOp }}>Thanks for walking through.</motion.p>
-
-        <motion.div className="ct-body" style={{ opacity: bodyOp, y: bodyY, pointerEvents: live ? "auto" : "none" }}>
-          <div className="jc-center"><span className="jc-open"><i />Open to work · SDE internships &amp; full-time roles</span></div>
-          <SecHead label="Before you leave" title="Let's build something." variant="sides" sub="Internships, freelance work or just a hello. Click the address to copy it." />
-          <button className="jc-mail" onClick={copy} onMouseEnter={() => { setHot("sun", true); setHot("train", true); }} onMouseLeave={() => { setHot("sun", false); setHot("train", false); }}>{EMAIL}</button>
-          <div className="ct-acts">
-            <Magnetic><button className="jc-btn sun" onClick={() => setModal(true)}>Leave a note</button></Magnetic>
-            <Magnetic><button className="jc-btn ghost" onClick={() => scrollToY(0)}>Back to top ↑</button></Magnetic>
-          </div>
-          <div className="jc-keys" aria-label="Keyboard shortcuts">
+        <div className="ct2-panel">
+          <p className="ct2-hint">psst, these work on your keyboard too: {LINKS.map((l) => <kbd key={l.k}>{l.k}</kbd>)}</p>
+          <div className="ct2-tiles">
             {LINKS.map((l) => (
-              <a key={l.k} className="jc-key" href={l.href} target={l.href.startsWith("mailto") ? undefined : "_blank"} rel="noreferrer"><kbd>{l.k}</kbd>{l.label}</a>
+              <a key={l.k} className="ct2-tile" href={l.href} target={l.href.startsWith("mailto") ? undefined : "_blank"} rel="noreferrer" style={{ "--c": l.c, "--c2": l.c2, "--fg": l.dark ? "#1a1a1a" : "#fff" } as React.CSSProperties}>
+                <span className="ct2-cap">{l.cap}<i>↓</i></span>
+                <span className="ct2-key"><small>{l.k}</small><b>{l.label}</b></span>
+              </a>
             ))}
           </div>
-          <p className="ct-copy">© {new Date().getFullYear()} Ayush Panda. Press a key to jump to a link.</p>
-        </motion.div>
+        </div>
+        <p className="ct-copy">
+          © {new Date().getFullYear()} Ayush Panda · <button className="ct2-top" onClick={() => scrollToY(0)}>Back to top ↑</button>
+        </p>
       </div>
 
       <AnimatePresence>
